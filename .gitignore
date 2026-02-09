@@ -1,0 +1,13 @@
+# Database credentials
+db.php
+
+# SQL dumps
+*.sql
+
+# Environment / config files
+.env
+.env.local
+
+# OS junk
+.DS_Store
+Thumbs.db
