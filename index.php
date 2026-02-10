@@ -86,8 +86,8 @@
 
 </div>
 
-<!-- Dark Mode Toggle Button -->
-<button class="btn btn-secondary btn-darkmode" onclick="toggleDarkMode()">🌙 Dark Mode</button>
+<!-- Dark Mode Toggle Button 
+<button class="btn btn-secondary btn-darkmode" onclick="toggleDarkMode()">🌙 Dark Mode</button>-->
 
 </body>
 </html>
