@@ -6,7 +6,7 @@
     <title>My Notes App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
- 
+
   /* body, .card, input, textarea {
     transition: background-color 0.3s, color 0.3s, border-color 0.3s;
   }
@@ -28,7 +28,7 @@
     border-color: #444 !important;
   }
 
-  
+
   .btn-darkmode {
     position: fixed;
     bottom: 20px;
@@ -57,10 +57,14 @@
 <!-- Notes -->
 <div class="row">
 <?php
-    $notes = mysqli_query($conn, "SELECT * FROM notes ORDER BY id DESC");
+    /// Old query (fetched all notes, including deleted ones)
+    // $notes = mysqli_query($conn, "SELECT * FROM notes ORDER BY id DESC");
+
+    // New query: only show notes that are not soft-deleted
+    $notes = mysqli_query($conn, "SELECT * FROM notes WHERE deleted_at IS NULL ORDER BY id DESC");
 
     if (mysqli_num_rows($notes) == 0) {
-        echo "<p class='text-center text-muted'>No notes yet.</p>";
+    echo "<p class='text-center text-muted'>No notes yet.</p>";
     }
 
     while ($note = mysqli_fetch_assoc($notes)) {
@@ -81,12 +85,12 @@
             </div>
         </div>
     </div>
-<?php } ?>
+<?php }?>
 </div>
 
 </div>
 
-<!-- Dark Mode Toggle Button 
+<!-- Dark Mode Toggle Button
 <button class="btn btn-secondary btn-darkmode" onclick="toggleDarkMode()">🌙 Dark Mode</button>-->
 
 </body>
