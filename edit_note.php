@@ -22,7 +22,7 @@
     <input type="hidden" name="id" value="<?php echo $note['id'] ?>">
     <input type="text" name="title" class="form-control mb-3" value="<?php echo htmlspecialchars($note['title']) ?>" required>
     <textarea name="content" class="form-control mb-3" rows="5" required><?php echo htmlspecialchars($note['content']) ?></textarea>
-    <button class="btn btn-success w-100">Update Note</button>
+    <button class="btn btn-primary w-100">Update Note</button>
 </form>
 
 </div>
