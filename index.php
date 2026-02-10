@@ -75,7 +75,7 @@
                 <a href="edit_note.php?id=<?php echo $note['id'] ?>" class="btn btn-sm btn-warning">Edit</a>
                 <a href="delete_note.php?id=<?php echo $note['id'] ?>"
                    class="btn btn-sm btn-danger"
-                   onclick="return confirm('Delete this note?')">
+                   onclick="return confirm('Are you sure?')">
                    Delete
                 </a>
             </div>
