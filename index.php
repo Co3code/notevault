@@ -1,4 +1,14 @@
-<?php include "db.php"; ?>
+<?php session_start();
+    include "db.php";
+
+    // Check if user is logged in
+    if (! isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+    }
+?>
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -267,6 +277,8 @@
             <h4 class="mb-0">
                 <i class="fas fa-sticky-note me-2"></i>My Notes
             </h4>
+             <small class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['user']); ?>!</small>
+        </div>
         </div>
         <nav class="sidebar-nav">
             <a href="#" class="sidebar-link active" data-section="add-note">
@@ -276,6 +288,9 @@
                 <i class="fas fa-list me-2"></i>View Notes
             </a>
         </nav>
+           <a href="logout.php" class="btn logout-btn">
+            <i class="fas fa-sign-out-alt me-2"></i>Logout
+        </a>
     </div>
 
     <!-- Mobile Sidebar Toggle -->
