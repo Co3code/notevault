@@ -1,4 +1,5 @@
-<?php session_start();
+<?php
+    session_start();
     include "db.php";
 
     // Check if user is logged in
@@ -6,7 +7,17 @@
     header("Location: login.php");
     exit();
     }
-?>
+
+    // Get all notes for sidebar
+    $all_notes = mysqli_query($conn, "SELECT * FROM notes WHERE deleted_at IS NULL ORDER BY id DESC");
+
+    // Get selected note if any
+    $selected_note = null;
+    if (isset($_GET['note_id'])) {
+    $note_id       = (int) $_GET['note_id'];
+    $result        = mysqli_query($conn, "SELECT * FROM notes WHERE id = $note_id AND deleted_at IS NULL");
+    $selected_note = mysqli_fetch_assoc($result);
+    }
 ?>
 
 <!DOCTYPE html>
@@ -32,13 +43,15 @@
             top: 0;
             left: 0;
             height: 100vh;
-            width: 250px;
+            width: 300px;
             background: rgba(255,255,255,0.95);
             backdrop-filter: blur(10px);
             box-shadow: 2px 0 10px rgba(0,0,0,0.1);
             z-index: 1000;
             transition: transform 0.3s ease;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
 
         .sidebar.dark-mode {
@@ -49,6 +62,7 @@
         .sidebar-header {
             padding: 1.5rem;
             border-bottom: 1px solid rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
 
         .sidebar-header.dark-mode {
@@ -57,6 +71,8 @@
 
         .sidebar-nav {
             padding: 1rem 0;
+            flex-grow: 1;
+            overflow-y: auto;
         }
 
         .sidebar-link {
@@ -67,6 +83,7 @@
             transition: all 0.3s ease;
             border-radius: 0 25px 25px 0;
             margin: 0.25rem 0;
+            font-size: 0.9rem;
         }
 
         .sidebar-link:hover, .sidebar-link.active {
@@ -79,18 +96,18 @@
             color: #ecf0f1;
         }
 
+        .note-link {
+            padding-left: 2rem;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         .main-content {
-            margin-left: 250px;
+            margin-left: 300px;
             padding: 2rem;
             min-height: 100vh;
-        }
-
-        .content-section {
-            display: none;
-        }
-
-        .content-section.active {
-            display: block;
         }
 
         h1 {
@@ -116,12 +133,6 @@
 
         .card-body {
             padding: 1.5rem;
-        }
-
-        .card-footer {
-            background: transparent;
-            border-top: 1px solid rgba(0,0,0,0.1);
-            padding: 1rem 1.5rem;
         }
 
         .form-control {
@@ -169,11 +180,6 @@
             font-size: 0.875rem;
         }
 
-        .text-center.text-muted {
-            color: rgba(255,255,255,0.8) !important;
-            font-style: italic;
-        }
-
         .dark-mode-toggle {
             position: fixed;
             bottom: 20px;
@@ -193,6 +199,24 @@
         .dark-mode-toggle:hover {
             transform: scale(1.1);
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .logout-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
         }
 
         /* Dark Mode Styles */
@@ -217,16 +241,8 @@
             box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
         }
 
-        .dark-mode .card-footer {
-            border-top-color: rgba(255,255,255,0.1);
-        }
-
         .dark-mode h1 {
             color: #ecf0f1;
-        }
-
-        .dark-mode .text-center.text-muted {
-            color: rgba(236, 240, 241, 0.8) !important;
         }
 
         /* Responsive adjustments */
@@ -262,6 +278,14 @@
             h1 {
                 font-size: 2rem;
             }
+
+            .logout-btn {
+                position: static;
+                margin-top: 1rem;
+                width: calc(100% - 2rem);
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
         }
 
         .sidebar-toggle {
@@ -277,18 +301,22 @@
             <h4 class="mb-0">
                 <i class="fas fa-sticky-note me-2"></i>My Notes
             </h4>
-             <small class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['user']); ?>!</small>
-        </div>
+            <small class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['user']); ?>!</small>
         </div>
         <nav class="sidebar-nav">
-            <a href="#" class="sidebar-link active" data-section="add-note">
-                <i class="fas fa-plus-circle me-2"></i>Add Note
+            <a href="index.php" class="sidebar-link">
+                <i class="fas fa-plus-circle me-2"></i>Add New Note
             </a>
-            <a href="#" class="sidebar-link" data-section="view-notes">
-                <i class="fas fa-list me-2"></i>View Notes
-            </a>
+            <div class="mt-3">
+                <small class="text-muted px-3">Your Notes:</small>
+                <?php while ($note = mysqli_fetch_assoc($all_notes)): ?>
+                    <a href="index.php?note_id=<?php echo $note['id']; ?>" class="sidebar-link note-link <?php echo($selected_note && $selected_note['id'] == $note['id']) ? 'active' : ''; ?>">
+                        <i class="fas fa-file-alt me-2"></i><?php echo htmlspecialchars(substr($note['title'], 0, 25)); ?><?php echo strlen($note['title']) > 25 ? '...' : ''; ?>
+                    </a>
+                <?php endwhile; ?>
+            </div>
         </nav>
-           <a href="logout.php" class="btn logout-btn">
+        <a href="logout.php" class="btn logout-btn">
             <i class="fas fa-sign-out-alt me-2"></i>Logout
         </a>
     </div>
@@ -304,9 +332,29 @@
             <i class="fas fa-sticky-note me-2"></i>My Notes
         </h1>
 
-        <!-- Add Note Section -->
-        <div id="add-note" class="content-section active">
-            <div class="card shadow mb-4">
+        <?php if ($selected_note): ?>
+            <!-- View/Edit Selected Note -->
+            <div class="card shadow">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                        <i class="fas fa-file-alt me-2"></i><?php echo htmlspecialchars($selected_note['title']); ?>
+                    </h5>
+                    <p class="card-text"><?php echo nl2br(htmlspecialchars($selected_note['content'])); ?></p>
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="edit_note.php?id=<?php echo $selected_note['id']; ?>" class="btn btn-warning">
+                            <i class="fas fa-edit me-1"></i>Edit
+                        </a>
+                        <a href="delete_note.php?id=<?php echo $selected_note['id']; ?>"
+                           class="btn btn-danger"
+                           onclick="return confirm('Are you sure you want to delete this note?')">
+                           <i class="fas fa-trash me-1"></i>Delete
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <?php else: ?>
+            <!-- Add New Note -->
+            <div class="card shadow">
                 <div class="card-body">
                     <h5 class="card-title mb-3">
                         <i class="fas fa-plus-circle me-2"></i>Add New Note
@@ -316,7 +364,7 @@
                             <input type="text" name="title" class="form-control" placeholder="Note title" required>
                         </div>
                         <div class="mb-3">
-                            <textarea name="content" class="form-control" rows="4" placeholder="Write your note..." required></textarea>
+                            <textarea name="content" class="form-control" rows="8" placeholder="Write your note..." required></textarea>
                         </div>
                         <button class="btn btn-primary w-100">
                             <i class="fas fa-save me-2"></i>Save Note
@@ -324,44 +372,7 @@
                     </form>
                 </div>
             </div>
-        </div>
-
-        <!-- View Notes Section -->
-        <div id="view-notes" class="content-section">
-            <div class="row">
-                <?php
-                    // Query to fetch only non-deleted notes
-                    $notes = mysqli_query($conn, "SELECT * FROM notes WHERE deleted_at IS NULL ORDER BY id DESC");
-
-                    if (mysqli_num_rows($notes) == 0) {
-                        echo "<div class='col-12'><p class='text-center text-muted'><i class='fas fa-inbox me-2'></i>No notes yet. Start by adding one!</p></div>";
-                    }
-
-                    while ($note = mysqli_fetch_assoc($notes)) {
-                    ?>
-                    <div class="col-lg-4 col-md-6 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title mb-3">
-                                    <i class="fas fa-file-alt me-2"></i><?php echo htmlspecialchars($note['title']); ?>
-                                </h5>
-                                <p class="card-text flex-grow-1"><?php echo nl2br(htmlspecialchars($note['content'])); ?></p>
-                            </div>
-                            <div class="card-footer d-flex justify-content-between">
-                                <a href="edit_note.php?id=<?php echo $note['id']; ?>" class="btn btn-sm btn-warning">
-                                    <i class="fas fa-edit me-1"></i>Edit
-                                </a>
-                                <a href="delete_note.php?id=<?php echo $note['id']; ?>"
-                                   class="btn btn-sm btn-danger"
-                                   onclick="return confirm('Are you sure you want to delete this note?')">
-                                   <i class="fas fa-trash me-1"></i>Delete
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                <?php }?>
-            </div>
-        </div>
+        <?php endif; ?>
     </div>
 
     <!-- Dark Mode Toggle Button -->
@@ -371,24 +382,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Sidebar Navigation
-        document.querySelectorAll('.sidebar-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const sectionId = this.getAttribute('data-section');
-
-                // Remove active class from all links
-                document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
-                // Add active class to clicked link
-                this.classList.add('active');
-
-                // Hide all sections
-                document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-                // Show selected section
-                document.getElementById(sectionId).classList.add('active');
-            });
-        });
-
         // Mobile Sidebar Toggle
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
