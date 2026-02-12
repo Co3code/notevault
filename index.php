@@ -299,7 +299,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h4 class="mb-0">
-                <i class="fas fa-sticky-note me-2"></i>My Notes
+                <i class="me-2"></i>My Notes
             </h4>
             <small class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['user']); ?>!</small>
         </div>
@@ -329,7 +329,8 @@
     <!-- Main Content -->
     <div class="main-content">
         <h1 class="text-center mb-4">
-            <i class="fas fa-sticky-note me-2"></i>My Notes
+            <i class="fas fa-pencil me-2"></i>Drafts
+
         </h1>
 
         <?php if ($selected_note): ?>
