@@ -28,7 +28,10 @@
     <title>My Notes App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Summernote CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.css" rel="stylesheet">
     <style>
+
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
@@ -299,7 +302,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h4 class="mb-0">
-                <i class="me-2"></i>My Notes
+                <i class=" me-2"></i>My Notes
             </h4>
             <small class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['user']); ?>!</small>
         </div>
@@ -340,7 +343,10 @@
                     <h5 class="card-title mb-3">
                         <i class="fas fa-file-alt me-2"></i><?php echo htmlspecialchars($selected_note['title']); ?>
                     </h5>
-                    <p class="card-text"><?php echo nl2br(htmlspecialchars($selected_note['content'])); ?></p>
+                    <!--
+                    <p class="card-text"> echo nl2br(htmlspecialchars($selected_note['content'])); ?></p>-->
+                    <p class="card-text"><?php echo $selected_note['content']; ?></p>
+
                     <div class="d-flex justify-content-between mt-3">
                         <a href="edit_note.php?id=<?php echo $selected_note['id']; ?>" class="btn btn-warning">
                             <i class="fas fa-edit me-1"></i>Edit
@@ -365,7 +371,7 @@
                             <input type="text" name="title" class="form-control" placeholder="Note title" required>
                         </div>
                         <div class="mb-3">
-                            <textarea name="content" class="form-control" rows="8" placeholder="Write your note..." required></textarea>
+                            <textarea name="content" id="summernote" class="form-control" rows="8" placeholder="Write your note..." required></textarea>
                         </div>
                         <button class="btn btn-primary w-100">
                             <i class="fas fa-save me-2"></i>Save Note
@@ -415,5 +421,18 @@
             localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
         }
     </script>
+    <!-- jQuery (Required for Summernote) -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Summernote JS -->
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            height: 250
+        });
+    });
+</script>
 </body>
 </html>

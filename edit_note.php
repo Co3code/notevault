@@ -274,7 +274,11 @@
                                 <label for="content" class="form-label">
                                     <i class="fas fa-file-alt me-2"></i>Note Content
                                 </label>
-                                <textarea name="content" id="content" class="form-control" rows="8" required><?php echo htmlspecialchars($note['content']) ?></textarea>
+                                <!--
+                                    <textarea name="content" id="content" class="form-control" rows="8" required><?php echo htmlspecialchars($note['content']) ?></textarea>
+                                -->
+                                <textarea name="content" id="summernote" class="form-control" rows="8" placeholder="Write your note..." required></textarea>
+
                             </div>
                             <div class="d-flex justify-content-between">
                                 <a href="index.php" class="btn btn-secondary">
