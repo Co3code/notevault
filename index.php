@@ -68,7 +68,7 @@
             flex-shrink: 0;
         }
 
-        .sidebar-header.dark-mode {
+        .sidebar.dark-mode .sidebar-header {
             border-bottom-color: rgba(255,255,255,0.1);
         }
 
@@ -95,7 +95,7 @@
             transform: translateX(5px);
         }
 
-        .sidebar-link.dark-mode {
+        .sidebar.dark-mode .sidebar-link {
             color: #ecf0f1;
         }
 
@@ -294,7 +294,37 @@
         .sidebar-toggle {
             display: none;
         }
+        /* Summernote Dark Mode */
+body.dark-mode .note-editor {
+    background-color: #34495e !important;
+    color: #ecf0f1 !important;
+    border: 1px solid #2c3e50 !important;
+}
+
+body.dark-mode .note-toolbar,
+body.dark-mode .note-statusbar {
+    background-color: #2c3e50 !important;
+    border-color: #1d3557 !important;
+}
+
+body.dark-mode .note-editable {
+    background-color: #34495e !important;
+    color: #ecf0f1 !important;
+}
+
+body.dark-mode .note-btn,
+body.dark-mode .note-btn:hover,
+body.dark-mode .note-btn:focus {
+    background-color: #2c3e50 !important;
+    color: #ecf0f1 !important;
+    border: none !important;
+}
+/* Add this for text-muted in dark sidebar */
+.sidebar.dark-mode .text-muted {
+    color: #bdc3c7 !important;
+}
     </style>
+
 </head>
 
 <body>
@@ -302,7 +332,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h4 class="mb-0">
-                <i class=" me-2"></i>My Notes
+                <i class="fas fa-sticky-note me-2"></i>My Notes
             </h4>
             <small class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['user']); ?>!</small>
         </div>
@@ -388,51 +418,44 @@
     </button>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.js"></script>
+
     <script>
-        // Mobile Sidebar Toggle
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('show');
         }
 
-        // Dark Mode Toggle with Persistence
         document.addEventListener('DOMContentLoaded', () => {
             const isDark = localStorage.getItem('darkMode') === 'enabled';
             if (isDark) {
                 document.body.classList.add('dark-mode');
                 document.getElementById('sidebar').classList.add('dark-mode');
-                document.querySelectorAll('.sidebar-link').forEach(link => link.classList.add('dark-mode'));
                 document.getElementById('darkModeBtn').innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            if ($('#summernote').length) {
+                $('#summernote').summernote({ height: 250 });
             }
         });
 
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
             document.getElementById('sidebar').classList.toggle('dark-mode');
-            document.querySelectorAll('.sidebar-link').forEach(link => link.classList.toggle('dark-mode'));
 
             const isDark = document.body.classList.contains('dark-mode');
-
-            // Update button icon
-            const btn = document.getElementById('darkModeBtn');
-            btn.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-
-            // Save preference
+            document.getElementById('darkModeBtn').innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
             localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+
+            if ($('#summernote').length) {
+                const content = $('#summernote').summernote('code');
+                $('#summernote').summernote('destroy');
+                $('#summernote').summernote({ height: 250 });
+                $('#summernote').summernote('code', content);
+            }
         }
     </script>
-    <!-- jQuery (Required for Summernote) -->
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- Summernote JS -->
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        $('#summernote').summernote({
-            height: 250
-        });
-    });
-</script>
 </body>
 </html>
