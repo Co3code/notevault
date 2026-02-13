@@ -332,7 +332,7 @@ body.dark-mode .note-btn:focus {
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h4 class="mb-0">
-                <i class="fas fa-sticky-note me-2"></i>My Notes
+                <i class="fas fa-folder-open me-2"></i>MindNest
             </h4>
             <small class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['user']); ?>!</small>
         </div>
@@ -362,7 +362,7 @@ body.dark-mode .note-btn:focus {
     <!-- Main Content -->
     <div class="main-content">
         <h1 class="text-center mb-4">
-            <i class="fas fa-pencil me-2"></i>Drafts
+            IdeaNest<i class="fas fa-pencil me-2"></i>
 
         </h1>
 
