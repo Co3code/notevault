@@ -1,7 +1,15 @@
 <?php
+    // Validate note ID from URL and redirect if missing/invalid
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+    if ($id <= 0) {
+    header("Location: index.php");
+    exit;
+    }
     include "db.php";
 
-    $id     = $_GET['id'];
+    // $id     = $_GET['id'];
+    $id     = (int) $_GET['id'];
     $result = mysqli_query($conn, "SELECT * FROM notes WHERE id=$id");
     $note   = mysqli_fetch_assoc($result);
 ?>
@@ -14,6 +22,9 @@
     <title>Edit Note - My Notes App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<!-- adding link summernote-->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.css" rel="stylesheet">
+
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -334,5 +345,23 @@
             localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
         }
     </script>
+    <!--  fixing the old content to show when editing-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+
+    // Initialize Summernote
+    $('#summernote').summernote({
+        height: 250
+    });
+
+    // Load old content into editor
+    $('#summernote').summernote('code', <?php echo json_encode($note['content']); ?>);
+
+});
+</script>
+
+
 </body>
 </html>
