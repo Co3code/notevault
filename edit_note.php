@@ -245,7 +245,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h4 class="mb-0">
-                <i class="fas fa-sticky-note me-2"></i>My Notes
+                My Notes
             </h4>
         </div>
         <nav class="sidebar-nav">
