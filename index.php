@@ -1,22 +1,31 @@
 <?php
     session_start();
+    // var_dump($_SESSION);
     include "db.php";
 
     // Check if user is logged in
-    if (! isset($_SESSION['user'])) {
+    if (! isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
     }
+    // set $user_id from session
+    $user_id = $_SESSION['user_id'];
 
     // Get all notes for sidebar
-    $all_notes = mysqli_query($conn, "SELECT * FROM notes WHERE deleted_at IS NULL ORDER BY id DESC");
+    $stmt_all = $conn->prepare("SELECT * FROM notes WHERE user_id = ? AND deleted_at IS NULL ORDER BY id DESC");
+    $stmt_all->bind_param("i", $user_id);
+    $stmt_all->execute();
+    $all_notes = $stmt_all->get_result();
 
     // Get selected note if any
     $selected_note = null;
     if (isset($_GET['note_id'])) {
-    $note_id       = (int) $_GET['note_id'];
-    $result        = mysqli_query($conn, "SELECT * FROM notes WHERE id = $note_id AND deleted_at IS NULL");
-    $selected_note = mysqli_fetch_assoc($result);
+    $note_id  = (int) $_GET['note_id'];
+    $stmt_sel = $conn->prepare("SELECT * FROM notes WHERE id = ? AND user_id = ? AND deleted_at IS NULL");
+    $stmt_sel->bind_param("ii", $note_id, $user_id);
+    $stmt_sel->execute();
+    $result        = $stmt_sel->get_result();
+    $selected_note = $result->fetch_assoc();
     }
 ?>
 
@@ -334,7 +343,7 @@ body.dark-mode .note-btn:focus {
             <h4 class="mb-0">
                 <i class="fas fa-folder-open me-2"></i>MindNest
             </h4>
-            <small class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['user']); ?>!</small>
+            <small class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</small>
         </div>
         <nav class="sidebar-nav">
             <a href="index.php" class="sidebar-link">

@@ -1,17 +1,33 @@
 <?php
-    // Validate note ID from URL and redirect if missing/invalid
-    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-    if ($id <= 0) {
-    header("Location: index.php");
-    exit;
-    }
+    session_start();
     include "db.php";
 
-    // $id     = $_GET['id'];
-    $id     = (int) $_GET['id'];
-    $result = mysqli_query($conn, "SELECT * FROM notes WHERE id=$id");
-    $note   = mysqli_fetch_assoc($result);
+    // Ensure user is logged in
+    if (! isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+    }
+    $user_id = $_SESSION['user_id'];
+
+    // Validate note ID
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+    if ($id <= 0) {
+    header("Location: index.php");
+    exit();
+    }
+
+    // Fetch note only if it belongs to this user and not deleted
+    $stmt = $conn->prepare("SELECT * FROM notes WHERE id = ? AND user_id = ? AND deleted_at IS NULL");
+    $stmt->bind_param("ii", $id, $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $note   = $result->fetch_assoc();
+
+    if (! $note) {
+    // Note not found or not allowed
+    header("Location: index.php");
+    exit();
+    }
 ?>
 
 <!DOCTYPE html>
