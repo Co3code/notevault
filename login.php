@@ -7,14 +7,17 @@
     $password = $_POST['password'];
 
     // Secure your query! Consider using prepared statements later.
-    $sql    = "SELECT * FROM users WHERE username='$username'";
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $user = $result->fetch_assoc();
 
         if (password_verify($password, $user['password'])) {
-            $_SESSION['user'] = $user['username'];
+            $_SESSION['user_id']  = $user['id'];
+            $_SESSION['username'] = $user['username'];
             header("Location: index.php");
             exit();
         } else {
@@ -37,10 +40,11 @@
     <style>
         body {
             /* REPLACE 'background-image.jpg' WITH YOUR FILE PATH */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/3dd.jpg');
-            background-size: cover;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/hell.jpg');
+            background-size: contain;
             background-position: center;
             background-attachment: fixed;
+
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -128,7 +132,7 @@
 <body>
 
     <div class="login-card">
-        <h2><i class="fas fa-edit me-2"></i>My Notes</h2>
+        <h2><i class=""></i>NoteVault</h2>
 
         <?php if (isset($error)): ?>
             <div class="alert alert-danger" role="alert">
@@ -149,7 +153,11 @@
                 Sign In
             </button>
         </form>
+        <p class="mt-3 text-center text-white">
+             Don't have an account? <a href="register.php" class="text-decoration-none" style="color: #ffd700;">Register here</a>
+        </p>
     </div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
