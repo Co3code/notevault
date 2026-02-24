@@ -2,6 +2,8 @@
     session_start();
     // var_dump($_SESSION);
     include "db.php";
+    $pageTitle = "Your Notes";
+    include 'header.php';
 
     // Check if user is logged in
     if (! isset($_SESSION['user_id'])) {
@@ -34,7 +36,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Notes App</title>
+    <!-- <title>My Notes App</title> -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Summernote CSS -->
@@ -341,7 +343,7 @@ body.dark-mode .note-btn:focus {
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h4 class="mb-0">
-                <i class="fas fa-folder-open me-2"></i>MindNest
+                <!-- <i class="fas fa-folder-open me-2"></i>MindNest -->
             </h4>
             <small class="text-muted">Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!</small>
         </div>
@@ -371,7 +373,7 @@ body.dark-mode .note-btn:focus {
     <!-- Main Content -->
     <div class="main-content">
         <h1 class="text-center mb-4">
-            IdeaNest<i class="fas fa-pencil me-2"></i>
+            <!-- IdeaNest<i class="fas fa-pencil me-2"></i> -->
 
         </h1>
 
