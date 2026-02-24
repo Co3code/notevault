@@ -1,10 +1,12 @@
 <?php
-session_start();
-include "db.php";
+    session_start();
+    include "db.php";
+    $pageTitle = "Register-NoteVault";
+    include 'header.php';
 
-$success = null;
+    $success = null;
 
-if (isset($_POST['register'])) {
+    if (isset($_POST['register'])) {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
@@ -32,7 +34,7 @@ if (isset($_POST['register'])) {
             $error = "Error creating user: " . $stmt->error;
         }
     }
-}
+    }
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +42,7 @@ if (isset($_POST['register'])) {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Register - NoteVault</title>
+<!-- <title>Register - NoteVault</title> -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -136,15 +138,15 @@ h2 {
 <div class="register-card">
     <h2><i class="fas fa-user-plus me-2"></i>Register</h2>
 
-    <?php if(isset($error)): ?>
+    <?php if (isset($error)): ?>
         <div class="alert alert-danger mb-3"><?php echo $error; ?></div>
     <?php endif; ?>
 
-    <?php if(isset($success)): ?>
+    <?php if (isset($success)): ?>
         <div class="alert alert-success mb-3"><?php echo $success; ?></div>
     <?php endif; ?>
 
-    <?php if(!isset($success)): ?>
+    <?php if (! isset($success)): ?>
     <form method="POST">
         <div class="input-group">
             <span class="input-group-text"><i class="fas fa-user"></i></span>
