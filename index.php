@@ -1,13 +1,13 @@
 <?php
     session_start();
     // var_dump($_SESSION);
-    include "db.php";
+    require 'config/db.php';
     $pageTitle = "Your Notes";
-    include 'header.php';
+    require 'includes/header.php';
 
     // Check if user is logged in
     if (! isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: auth/login.php");
     exit();
     }
     // set $user_id from session
@@ -360,7 +360,7 @@ body.dark-mode .note-btn:focus {
                 <?php endwhile; ?>
             </div>
         </nav>
-        <a href="logout.php" class="btn logout-btn">
+        <a href="auth/logout.php" class="btn logout-btn">
             <i class="fas fa-sign-out-alt me-2"></i>Logout
         </a>
     </div>
@@ -389,10 +389,10 @@ body.dark-mode .note-btn:focus {
                     <p class="card-text"><?php echo $selected_note['content']; ?></p>
 
                     <div class="d-flex justify-content-between mt-3">
-                        <a href="edit_note.php?id=<?php echo $selected_note['id']; ?>" class="btn btn-warning">
+                        <a href="notes/edit_note.php?id=<?php echo $selected_note['id']; ?>" class="btn btn-warning">
                             <i class="fas fa-edit me-1"></i>Edit
                         </a>
-                        <a href="delete_note.php?id=<?php echo $selected_note['id']; ?>"
+                        <a href="notes/delete_note.php?id=<?php echo $selected_note['id']; ?>"
                            class="btn btn-danger"
                            onclick="return confirm('Are you sure you want to delete this note?')">
                            <i class="fas fa-trash me-1"></i>Delete
@@ -407,7 +407,7 @@ body.dark-mode .note-btn:focus {
                     <h5 class="card-title mb-3">
                         <i class="fas fa-plus-circle me-2"></i>Add New Note
                     </h5>
-                    <form action="save_note.php" method="POST">
+                    <form action="notes/save_note.php" method="POST">
                         <div class="mb-3">
                             <input type="text" name="title" class="form-control" placeholder="Note title" required>
                         </div>
