@@ -294,7 +294,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// I've optimized your existing pagination logic to be more concise
+
 function setupTableSearchPagination(inputId, tableId, paginationId, rowsPerPage = 8) {
     const input = document.getElementById(inputId);
     const table = document.getElementById(tableId);
