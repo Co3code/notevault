@@ -39,16 +39,39 @@
 
         /* Sidebar Styling */
         .sidebar {
-            width: var(--sidebar-width);
-            height: 100vh;
-            position: fixed;
-            background: #ffffff;
-            border-right: 1px solid #e2e8f0;
-            padding: 2rem 1rem;
-            z-index: 100;
-        }
+    width: var(--sidebar-width);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #ffffff;
+    border-right: 1px solid #e2e8f0;
+    padding: 2rem 1rem;
+    z-index: 1050;
+    transition: transform 0.3s ease;
+}
 
-        .main-content { margin-left: var(--sidebar-width); padding: 2rem; }
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 2rem;
+    transition: margin-left 0.3s ease;
+}
+
+/* 🔥 MOBILE FIX */
+@media (max-width: 991px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+}
 
         .nav-pills .nav-link {
             color: #64748b;
@@ -109,8 +132,11 @@
     </style>
 </head>
 <body>
+    <button class="btn btn-primary d-lg-none m-3" onclick="toggleSidebar()">
+    <i class="fa-solid fa-bars"></i>
+    </button>
 
-<div class="sidebar d-none d-md-block">
+<div class="sidebar" id="sidebar">
     <div class="px-3 mb-4">
         <h4 class="fw-bold text-primary"><i class="fa-solid fa-bolt me-2"></i>AdminPro</h4>
     </div>
@@ -152,7 +178,7 @@
         <?php endif; ?>
 
         <div class="row g-4 mb-5">
-            <div class="col-md-4">
+            <div class="col-12 col-md-6 col-xl-4">
                 <div class="card stat-card bg-primary text-white">
                     <div class="card-body d-flex align-items-center">
                         <div class="icon-shape me-3"><i class="fa-solid fa-user-group"></i></div>
@@ -163,7 +189,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-12 col-md-6 col-xl-4">
                 <div class="card stat-card bg-success text-white">
                     <div class="card-body d-flex align-items-center">
                         <div class="icon-shape me-3"><i class="fa-solid fa-check-double"></i></div>
@@ -174,7 +200,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-12 col-md-6 col-xl-4">
                 <div class="card stat-card bg-dark text-white">
                     <div class="card-body d-flex align-items-center">
                         <div class="icon-shape me-3"><i class="fa-solid fa-trash"></i></div>
@@ -294,6 +320,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('show');
+}
 
 function setupTableSearchPagination(inputId, tableId, paginationId, rowsPerPage = 8) {
     const input = document.getElementById(inputId);
