@@ -47,8 +47,8 @@
     <style>
         body {
             /* REPLACE 'background-image.jpg' WITH YOUR FILE PATH */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/hell.jpg');
-            background-size: contain;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/sunavif.avif');
+            background-size: cover;
             background-position: center;
             background-attachment: fixed;
 
