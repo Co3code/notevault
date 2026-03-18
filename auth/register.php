@@ -2,7 +2,6 @@
     session_start();
     require '../config/db.php';
     $pageTitle = "Register-NoteVault";
-    include '../includes/header.php';
 
     $success = null;
 
@@ -42,14 +41,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- <title>Register - NoteVault</title> -->
+<title>Register - NoteSpace</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <style>
 body {
-    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/hell.jpg');
-    background-size: contain;
+    background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../images/notes3.jpg');
+    background-size: cover;
     background-position: center;
+    background-attachment: fixed;
     min-height: 100vh;
     display: flex;
     align-items: center;

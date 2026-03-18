@@ -1,0 +1,45 @@
+Updated login system
+
+Store $_SESSION['user_id'] after login.
+
+Any query now uses user_id = $_SESSION['user_id'] so users only see their own notes.
+
+Updated index.php
+
+Sidebar shows only notes for the logged-in user.
+
+Add/Edit/Delete only affects notes of the logged-in user.
+
+Updated save_note.php
+
+When saving a new note, we include user_id so each note is tied to the user:
+
+2. Terminology
+
+user_id in notes table – called a foreign key because it references the id in the users table.
+
+Foreign Key / Relationship:
+
+Each note is assigned to a specific user.
+
+This is called a one-to-many relationship:
+
+One user → many notes
+
+One note → one user
+
+Soft delete:
+
+Instead of permanently deleting a note, we set deleted_at = NOW().
+
+This allows recovering notes if needed.
+
+Effect in the app
+
+When you login, your session stores user_id.
+
+Any query for notes uses this user_id.
+
+Each user sees only their own notes.
+
+Other users cannot see or edit your notes.

@@ -12,3 +12,10 @@ db.php
 .DS_Store
 Thumbs.db
 images/
+favicon.ico
+
+
+edit_user-original.php
+edit_note-original.php
+admin_olddashboard.php
+admin_dashboard-original.php

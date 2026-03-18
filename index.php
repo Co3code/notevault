@@ -42,55 +42,43 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-bs5.min.css" rel="stylesheet">
 
     <style>
-        /* =============================================
-           CSS CUSTOM PROPERTIES
-        ============================================= */
         :root {
             --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --gradient-btn: linear-gradient(45deg, #667eea, #764ba2);
             --gradient-warning: linear-gradient(45deg, #f093fb, #f5576c);
             --gradient-danger: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            --sidebar-width: 300px;
-            --sidebar-bg: rgba(255, 255, 255, 0.95);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-color: #333;
-            --border-color: rgba(0, 0, 0, 0.1);
+            --sidebar-width: 280px;
+            --sidebar-bg: rgba(255, 255, 255, 0.97);
+            --card-bg: rgba(255, 255, 255, 0.97);
+            --text-color: #2d3748;
+            --text-muted: #718096;
+            --border-color: rgba(0, 0, 0, 0.08);
         }
 
-        /* =============================================
-           DARK MODE VARIABLES
-        ============================================= */
         body.dark-mode {
-            --sidebar-bg: rgba(44, 62, 80, 0.95);
-            --card-bg: rgba(44, 62, 80, 0.95);
-            --text-color: #ecf0f1;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --sidebar-bg: rgba(26, 32, 44, 0.97);
+            --card-bg: rgba(26, 32, 44, 0.97);
+            --text-color: #e2e8f0;
+            --text-muted: #a0aec0;
+            --border-color: rgba(255, 255, 255, 0.08);
         }
 
-        /* =============================================
-           BODY & LAYOUT
-        ============================================= */
         body {
             background: var(--gradient-primary);
-            background-size: cover;
-            background-position: center;
             background-attachment: fixed;
             min-height: 100vh;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
-            overflow-x: hidden; /* Removes the horizontal/bottom scrollbar */
-            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
         }
 
         body.dark-mode {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            color: #ecf0f1;
+            background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+            color: var(--text-color);
         }
 
-        /* =============================================
-           SIDEBAR
-        ============================================= */
+        /* Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
@@ -98,8 +86,8 @@
             height: 100vh;
             width: var(--sidebar-width);
             background: var(--sidebar-bg);
-            backdrop-filter: blur(10px);
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(20px);
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.08);
             z-index: 1000;
             overflow-y: auto;
             display: flex;
@@ -108,213 +96,274 @@
         }
 
         .sidebar-header {
-            padding: 1.5rem;
+            padding: 1.75rem 1.5rem 1.25rem;
             border-bottom: 1px solid var(--border-color);
         }
 
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: var(--gradient-btn);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.4rem;
+        }
+
+        .sidebar-brand i {
+            background: var(--gradient-btn);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .sidebar-welcome {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
         .sidebar-nav {
-            padding: 1rem 0;
+            padding: 1rem 0.75rem;
             flex-grow: 1;
             overflow-y: auto;
         }
 
+        .sidebar-section-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            padding: 0.5rem 0.75rem;
+            margin-top: 0.5rem;
+        }
+
         .logout-btn-container {
-            padding: 1.5rem;
+            padding: 1.25rem 1rem;
             border-top: 1px solid var(--border-color);
         }
 
-        /* =============================================
-           SIDEBAR LINKS
-        ============================================= */
+        /* Sidebar Links */
         .sidebar-link {
-            display: block;
-            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            padding: 0.65rem 0.9rem;
             color: var(--text-color);
             text-decoration: none;
-            border-radius: 0 25px 25px 0;
-            margin: 0.25rem 0;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
+            border-radius: 10px;
+            margin: 0.15rem 0;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
         }
 
-        .sidebar-link:hover,
+        .sidebar-link:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            transform: translateX(3px);
+        }
+
         .sidebar-link.active {
             background: var(--gradient-btn);
             color: white;
-            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
         }
 
         .note-link {
-            padding-left: 2rem;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
+            font-weight: 400;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        /* Dark mode text overrides */
-        .sidebar.dark-mode .text-muted { color: #bdc3c7 !important; }
-
-        /* =============================================
-           SIDEBAR TOGGLE (Mobile)
-        ============================================= */
-        .sidebar-toggle {
-            display: none;
+        .sidebar.dark-mode .sidebar-link:hover {
+            background: rgba(102, 126, 234, 0.15);
         }
 
-        /* =============================================
-           MAIN CONTENT
-        ============================================= */
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            backdrop-filter: blur(2px);
+        }
+
+        .sidebar-overlay.show { display: block; }
+
+        /* Sidebar Toggle (Mobile) */
+        .sidebar-toggle { display: none; }
+
+        /* Main Content */
         .main-content {
             margin-left: var(--sidebar-width);
-            padding: 2rem;
+            padding: 2.5rem 2rem;
             min-height: 100vh;
         }
 
-        h1 {
-            color: white;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            margin-bottom: 2rem;
-        }
-
-        /* =============================================
-           CARDS
-        ============================================= */
+        /* Cards */
         .card {
             border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
             background: var(--card-bg);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            transition: box-shadow 0.3s ease, transform 0.2s ease;
         }
 
-        .card-body {
-            padding: 1.5rem;
+        .card:hover {
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
         }
 
-        .dark-mode .card {
-            color: #ecf0f1;
+        .card-body { padding: 2rem; }
+
+        .card-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-color);
         }
 
-        /* =============================================
-           FORM CONTROLS
-        ============================================= */
+        .dark-mode .card { color: var(--text-color); }
+
+        /* Form Controls */
         .form-control {
             border-radius: 10px;
-            border: none;
-            padding: 0.8rem;
+            border: 1.5px solid var(--border-color);
+            padding: 0.75rem 1rem;
             background: rgba(255, 255, 255, 0.9);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            font-size: 0.9rem;
         }
 
         .form-control:focus {
             border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
             background: #fff;
+            outline: none;
         }
 
         .dark-mode .form-control {
-            background: rgba(52, 73, 94, 0.9);
-            color: #ecf0f1;
-            border-color: rgba(255, 255, 255, 0.1);
+            background: rgba(45, 55, 72, 0.9);
+            color: var(--text-color);
+            border-color: var(--border-color);
         }
 
         .dark-mode .form-control:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
         }
 
-        /* =============================================
-           BUTTONS
-        ============================================= */
+        /* Buttons */
         .btn {
-            border-radius: 25px;
+            border-radius: 10px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            font-size: 0.875rem;
+            padding: 0.6rem 1.4rem;
+            transition: all 0.2s ease;
         }
 
         .btn-primary {
             background: var(--gradient-btn);
             border: none;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 18px rgba(102, 126, 234, 0.5);
+            transform: translateY(-1px);
         }
 
         .btn-warning {
             background: var(--gradient-warning);
             border: none;
             color: white;
+            box-shadow: 0 4px 12px rgba(240, 147, 251, 0.35);
+        }
+
+        .btn-warning:hover {
+            box-shadow: 0 6px 18px rgba(240, 147, 251, 0.5);
+            transform: translateY(-1px);
+            color: white;
         }
 
         .btn-danger {
             background: var(--gradient-danger);
             border: none;
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.35);
         }
 
-        /* =============================================
-           DARK MODE TOGGLE BUTTON
-        ============================================= */
+        .btn-danger:hover {
+            box-shadow: 0 6px 18px rgba(255, 107, 107, 0.5);
+            transform: translateY(-1px);
+        }
+
+        /* Dark Mode Toggle */
         .dark-mode-toggle {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 24px;
+            right: 24px;
             z-index: 1000;
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            width: 52px;
+            height: 52px;
             border: none;
             background: var(--gradient-btn);
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+            transition: all 0.2s ease;
         }
 
-        /* =============================================
-           SUMMERNOTE DARK MODE
-        ============================================= */
+        .dark-mode-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.55);
+        }
+
+        /* Summernote Dark Mode */
         body.dark-mode .note-editor {
-            background-color: #34495e !important;
-            color: #ecf0f1 !important;
-            border: 1px solid #2c3e50 !important;
+            background-color: #2d3748 !important;
+            color: #e2e8f0 !important;
+            border: 1px solid #4a5568 !important;
         }
 
         body.dark-mode .note-toolbar,
         body.dark-mode .note-statusbar {
-            background-color: #2c3e50 !important;
+            background-color: #1a202c !important;
         }
 
         body.dark-mode .note-editable {
-            background-color: #34495e !important;
-            color: #ecf0f1 !important;
+            background-color: #2d3748 !important;
+            color: #e2e8f0 !important;
         }
 
-        /* =============================================
-           RESPONSIVE (Mobile)
-        ============================================= */
+        /* Responsive (Mobile) */
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.show {
-                transform: translateX(0);
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 1.5rem 1rem; }
 
             .sidebar-toggle {
-                display: block;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 position: fixed;
-                top: 20px;
-                left: 20px;
+                top: 16px;
+                left: 16px;
                 z-index: 1001;
                 background: var(--gradient-btn);
                 color: white;
                 border: none;
-                border-radius: 50%;
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
+                border-radius: 12px;
+                width: 44px;
+                height: 44px;
+                font-size: 1.1rem;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
             }
         }
     </style>
@@ -327,9 +376,12 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <small class="text-muted">
-                Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!
-            </small>
+            <div class="sidebar-brand">
+                <i class="fas fa-book-open"></i> NoteSpace
+            </div>
+            <div class="sidebar-welcome">
+                👋 Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>!
+            </div>
         </div>
 
         <nav class="sidebar-nav">
@@ -337,8 +389,8 @@
                 <i class="fas fa-plus-circle me-2"></i>Add New Note
             </a>
 
-            <div class="mt-3">
-                <small class="text-muted px-3">Your Notes:</small>
+            <div class="mt-2">
+                <div class="sidebar-section-label">Your Notes</div>
 
                 <?php while ($note = mysqli_fetch_assoc($all_notes)): ?>
                     <a href="index.php?note_id=<?php echo $note['id']; ?>"
@@ -434,8 +486,20 @@
                 document.getElementById('darkModeBtn').innerHTML = '<i class="fas fa-sun"></i>';
             }
 
+            const summernoteConfig = {
+                height: 250,
+                toolbar: [
+                    ['style', ['bold', 'underline', 'italic', 'clear']],
+                    ['font', ['strikethrough']],
+                    ['fontsize', ['fontsize']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['view', ['fullscreen', 'codeview']]
+                ]
+            };
+
             if ($('#summernote').length) {
-                $('#summernote').summernote({ height: 250 });
+                $('#summernote').summernote(summernoteConfig);
             }
         });
 
@@ -450,7 +514,7 @@
             if ($('#summernote').length) {
                 const content = $('#summernote').summernote('code');
                 $('#summernote').summernote('destroy');
-                $('#summernote').summernote({ height: 250 });
+                $('#summernote').summernote(summernoteConfig);
                 $('#summernote').summernote('code', content);
             }
         }
