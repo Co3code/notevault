@@ -37,41 +37,68 @@
 
         body { font-family: 'Inter', sans-serif; background-color: var(--bg-light); color: #1e293b; }
 
-        /* Sidebar Styling */
         .sidebar {
-    width: var(--sidebar-width);
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: #ffffff;
-    border-right: 1px solid #e2e8f0;
-    padding: 2rem 1rem;
-    z-index: 1050;
-    transition: transform 0.3s ease;
-}
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: #ffffff;
+            border-right: 1px solid #e2e8f0;
+            padding: 2rem 1rem;
+            z-index: 1050;
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
 
-.main-content {
-    margin-left: var(--sidebar-width);
-    padding: 2rem;
-    transition: margin-left 0.3s ease;
-}
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 2rem;
+            transition: margin-left 0.3s ease;
+        }
 
-/* 🔥 MOBILE FIX */
-@media (max-width: 991px) {
-    .sidebar {
-        transform: translateX(-100%);
-    }
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1040;
+            backdrop-filter: blur(2px);
+        }
 
-    .sidebar.show {
-        transform: translateX(0);
-    }
+        .sidebar-overlay.show { display: block; }
 
-    .main-content {
-        margin-left: 0;
-        padding: 1rem;
-    }
-}
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 1060;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            width: 44px;
+            height: 44px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-toggle:hover {
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.55);
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 991px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; padding: 1rem; padding-top: 4.5rem; }
+            .sidebar-toggle { display: flex; }
+        }
 
         .nav-pills .nav-link {
             color: #64748b;
@@ -132,13 +159,17 @@
     </style>
 </head>
 <body>
-    <button class="btn btn-primary d-lg-none m-3" onclick="toggleSidebar()">
-    <i class="fa-solid fa-bars"></i>
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- Mobile Toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+        <i class="fa-solid fa-bars"></i>
     </button>
 
 <div class="sidebar" id="sidebar">
     <div class="px-3 mb-4">
-        <h4 class="fw-bold text-primary"><i class="fa-solid fa-bolt me-2"></i>AdminPro</h4>
+        <h4 class="fw-light text-dark">  <i ></i>Admin</h4>
     </div>
     <ul class="nav nav-pills flex-column" id="dashboardTabs" role="tablist">
         <li class="nav-item">
@@ -321,8 +352,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('show');
-}
+        document.getElementById('sidebar').classList.toggle('show');
+        document.getElementById('sidebarOverlay').classList.toggle('show');
+    }
 
 function setupTableSearchPagination(inputId, tableId, paginationId, rowsPerPage = 8) {
     const input = document.getElementById(inputId);

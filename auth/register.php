@@ -8,29 +8,36 @@
     if (isset($_POST['register'])) {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
+    $confirm_password = trim($_POST['confirm_password'] ?? '');
+
+    if ($password !== $confirm_password) {
+        $error = "Passwords do not match!";
+    }
 
     // Check if username already exists
-    $stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->store_result();
+    if (!isset($error)) {
+        $stmt = $conn->prepare("SELECT id FROM users WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->store_result();
 
-    if ($stmt->num_rows > 0) {
-        $error = "Username already taken!";
-    } else {
-        // Hash the password
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-        // Insert new user
-        $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-        $stmt->bind_param("ss", $username, $hashed_password);
-
-        if ($stmt->execute()) {
-            $success = "Registration successful! Redirecting to login...";
-            // Redirect after 2 seconds
-            header("refresh:2;url=login.php");
+        if ($stmt->num_rows > 0) {
+            $error = "Username already taken!";
         } else {
-            $error = "Error creating user: " . $stmt->error;
+            // Hash the password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            // Insert new user
+            $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+            $stmt->bind_param("ss", $username, $hashed_password);
+
+            if ($stmt->execute()) {
+                $success = "Registration successful! Redirecting to login...";
+                // Redirect after 2 seconds
+                header("refresh:2;url=login.php");
+            } else {
+                $error = "Error creating user: " . $stmt->error;
+            }
         }
     }
     }
@@ -41,7 +48,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Register - NoteSpace</title>
+<title>Register - NoteVault</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <style>
@@ -150,11 +157,15 @@ h2 {
     <form method="POST">
         <div class="input-group">
             <span class="input-group-text"><i class="fas fa-user"></i></span>
-            <input type="text" name="username" class="form-control" placeholder="Username" required>
+            <input type="text" name="username" class="form-control" placeholder="Username" required value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username'], ENT_QUOTES, 'UTF-8') : ''; ?>">
         </div>
         <div class="input-group">
             <span class="input-group-text"><i class="fas fa-lock"></i></span>
             <input type="password" name="password" class="form-control" placeholder="Password" required>
+        </div>
+        <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" name="confirm_password" class="form-control" placeholder="Confirm Password" required>
         </div>
         <button type="submit" name="register" class="btn btn-primary">Register</button>
         <a href="login.php" class="btn btn-link text-white mt-2">Back to login</a>
