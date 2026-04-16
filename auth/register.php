@@ -32,7 +32,7 @@
             $stmt->bind_param("ss", $username, $hashed_password);
 
             if ($stmt->execute()) {
-                $success = "Registration successful! Redirecting to login...";
+                $success = "Registration successful! Redirecting to login....";
                 // Redirect after 2 seconds
                 header("refresh:2;url=login.php");
             } else {
