@@ -1,8 +1,8 @@
 <?php
-session_start();
-include '../config/db.php';
+    session_start();
+    include '../config/db.php';
 
-if (isset($_POST['login'])) {
+    if (isset($_POST['login'])) {
 
     // Input handling
     $username = trim($_POST['username']);
@@ -33,7 +33,7 @@ if (isset($_POST['login'])) {
         //  Secure password check
         if (password_verify($password, $hash) && $user !== null) {
 
-            // 🛡 Prevent session fixation
+            //  Prevent session fixation
             session_regenerate_id(true);
 
             //  Set session data
@@ -54,7 +54,7 @@ if (isset($_POST['login'])) {
             $error = "Invalid username or password!";
         }
     }
-}
+    }
 ?>
 
 <!DOCTYPE html>
@@ -171,7 +171,12 @@ if (isset($_POST['login'])) {
         <form method="POST">
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-user"></i></span>
-                <input type="text" name="username" class="form-control" placeholder="Username" required>
+                <input
+                type="text"
+                 name="username"
+                  class="form-control"
+                  placeholder="Username" required
+                    value="<?php echo htmlspecialchars($username ?? '') ?>">  <!-- ??  kong naa gamiton ang usernmae na gi declared kong wala gamiton ang empty string('')  Null Coalescing Operator -->
             </div>
             <div class="input-group">
                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
